@@ -57,11 +57,23 @@ app.post("/newOrder", async (req, res) => {
   res.send("Order saved!");
 });
 
-app.listen(PORT, () => {
-  console.log("App Started");
-  mongoose.connect(uri);
-  console.log("DB Connected");
+// Lightweight health-check route for UptimeRobot
+app.get("/ping", (req, res) => {
+  res.status(200).send("pong");
 });
 
 app.use("/", authRoute);
+
+// Connect to MongoDB first, then start the server
+mongoose
+  .connect(uri)
+  .then(() => {
+    console.log("DB Connected");
+    app.listen(PORT, () => {
+      console.log(`App Started on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection failed:", err);
+  });
 
