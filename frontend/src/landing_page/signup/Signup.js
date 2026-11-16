@@ -29,36 +29,38 @@ const Signup = () => {
       position: "bottom-right",
     });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const { data } = await axios.post(
-        `${server}/signup`,
-        {
-          ...inputValue,
-        },
-        { withCredentials: true }
-      );
-      console.log(data);
-      const { success, message } = data;
-      if (success) {
-        handleSuccess(message);
-        setTimeout(() => {
-          navigate("/user");
-        }, 1000);
-      } else {
-        handleError(message);
-      }
-    } catch (error) {
-      console.log(error);
+ const [loading, setLoading] = useState(false);
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (loading) return; // Prevent double submissions
+  setLoading(true);
+
+  try {
+    const { data } = await axios.post(
+      `${server}/login`, // Use `${server}/signup` in Signup.js
+      { ...inputValue },
+      { withCredentials: true }
+    );
+    const { success, message } = data;
+    if (success) {
+      handleSuccess(message);
+      setInputValue({ email: "", password: "" }); // Reset only on success
+      setTimeout(() => {
+        navigate("/user");
+      }, 1000);
+    } else {
+      handleError(message);
     }
-    setInputValue({
-      ...inputValue,
-      email: "",
-      password: "",
-      username: "",
-    });
-  };
+  } catch (error) {
+    console.error(error);
+    handleError(
+      error.response?.data?.message || "Server is waking up or unreachable. Please try again."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="form_container">
@@ -94,12 +96,14 @@ const Signup = () => {
             onChange={handleOnChange}
           />
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={loading}>
+            {loading ? "Please wait..." : "Submit"}
+        </button>
         <span>
           Already have an account? <Link to={"/login"}>Login</Link>
         </span>
       </form>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </div>
   );
 };

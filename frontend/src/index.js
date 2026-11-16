@@ -14,12 +14,15 @@ import Footer from "./landing_page/Footer";
 import NotFound from "./landing_page/NotFound";
 import 'react-toastify/ReactToastify.css';
 import User from "./landing_page/User";
+import { ToastContainer } from "react-toastify";
+
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
   <Navbar/>
+  <ToastContainer />
     <Routes>
       <Route path="/user" element={<User/>} /> 
       <Route path="/" element={<HomePage />} /> 
