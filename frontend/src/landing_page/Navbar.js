@@ -15,7 +15,7 @@ function Navbar() {
             alt="Logo"
           />
         </Link>
-        <button
+        {/* <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
@@ -25,7 +25,7 @@ function Navbar() {
           aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
-        </button>
+        </button> */}
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <form class="d-flex" role="search">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
